@@ -1,0 +1,12 @@
+{% extends "base.twig" %}
+
+{% block body %}
+    <article>
+        <h1>Bonjjurles gens</h1>
+        {% for post in posts|slice(0, 3) %}
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content }}</p>
+            <a href="{{ post.link }}">Lire la suite</a>
+        {% endfor %}
+    </article>
+{% endblock %}

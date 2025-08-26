@@ -1,4 +1,14 @@
 <?php
+/**
+ * ACF Agency Workflow Configuration
+ * 
+ * Configuration optimisée pour le workflow agence :
+ * - DEV : Mode JSON modifiable avec warning de synchronisation
+ * - PROD/PREPROD : Mode PHP automatique via ACF Extended
+ * 
+ * @author HectorAnalytics.com
+ * @version 1.0
+ */
 
 // Sécurité : empêcher l'accès direct
 if (!defined('ABSPATH')) {
@@ -75,6 +85,12 @@ class ACF_Agency_Workflow {
         // Active l'Auto Sync PHP d'ACF Extended (si disponible)
         if (class_exists('ACFE')) {
             add_filter('acfe/modules/force_sync', '__return_true');
+            
+            // Créer le dossier ACFE PHP s'il n'existe pas
+            $acfe_php_path = get_stylesheet_directory() . '/acfe-php';
+            if (!file_exists($acfe_php_path)) {
+                wp_mkdir_p($acfe_php_path);
+            }
         }
         
         // Masque l'interface ACF pour les non-administrateurs
@@ -92,9 +108,12 @@ class ACF_Agency_Workflow {
     public function acf_json_save_point($path) {
         $new_path = get_stylesheet_directory() . '/acf-json';
         
-        // Crée le dossier s'il n'existe pas
+        // Crée le dossier s'il n'existe pas avec gestion d'erreur
         if (!file_exists($new_path)) {
-            wp_mkdir_p($new_path);
+            if (!wp_mkdir_p($new_path)) {
+                error_log('ACF Agency Workflow: Impossible de créer le dossier acf-json');
+                return $path; // Retourne le chemin par défaut en cas d'échec
+            }
         }
         
         return $new_path;
@@ -117,16 +136,19 @@ class ACF_Agency_Workflow {
      * Vérifie s'il y a des champs à synchroniser
      */
     private function check_acf_sync_needed() {
-        if (!function_exists('acf_get_field_groups')) {
-            return 0;
+        $url = $_SERVER['REQUEST_URI'];
+        if (!function_exists('acf_get_field_groups') || strpos($url, 'acf-field-group') !== false) {
+            return false;
         }
         
+        // Récupère les groupes qui ont besoin d'être synchronisés
         $sync_groups = acf_get_field_groups();
         $sync_needed = array();
         
         foreach ($sync_groups as $group) {
             // Vérifie si le groupe a besoin d'être synchronisé
             if (acf_maybe_get($group, 'local') === 'json') {
+                // Compare les timestamps
                 $local = acf_get_local_field_group($group['key']);
                 $db = acf_get_field_group($group['key']);
                 
@@ -147,33 +169,12 @@ class ACF_Agency_Workflow {
      * Affiche le warning de synchronisation
      */
     public function sync_warning_notice() {
-        // Seulement sur les pages admin
-        if (!is_admin()) {
-            return;
-        }
-        
         $sync_count = $this->check_acf_sync_needed();
         
         if ($sync_count > 0) {
-            $message = sprintf(
-                _n(
-                    '%d groupe de champs ACF doit être synchronisé.',
-                    '%d groupes de champs ACF doivent être synchronisés.',
-                    $sync_count
-                ),
-                $sync_count
-            );
-            
-            echo '<div class="notice notice-warning" style="border-left: 4px solid #ff6b35; background: #fff3cd; padding: 15px;">';
-            echo '<div style="display: flex; align-items: center; justify-content: space-between;">';
-            echo '<div>';
-            echo '<p style="margin: 0; font-weight: bold; color: #856404;">⚠️ SYNCHRONISATION ACF REQUISE</p>';
-            echo '<p style="margin: 5px 0 0 0; color: #856404;">' . esc_html($message) . '</p>';
-            echo '</div>';
-            echo '<div>';
-            echo '<a href="' . esc_url(admin_url('edit.php?post_type=acf-field-group&post_status=sync')) . '" class="button button-primary" style="margin-left: 15px;">Synchroniser maintenant</a>';
-            echo '</div>';
-            echo '</div>';
+            echo '<div style="background: #d63384; color: white; padding: 20px; text-align: center; font-size: 18px; font-weight: bold; margin: 20px 0;">';
+            echo '🚨 ATTENTION : ' . $sync_count . ' CHAMP(S) ACF À SYNCHRONISER 🚨<br>';
+            echo '<a href="' . admin_url('edit.php?post_type=acf-field-group&post_status=sync') . '" style="color: white; text-decoration: underline;">CLIQUEZ ICI POUR SYNCHRONISER</a>';
             echo '</div>';
         }
     }
@@ -249,4 +250,4 @@ function cleanup_old_acf_json() {
 }
 
 // Hook pour nettoyer automatiquement (optionnel)
-// add_action('acf/save_post', 'cleanup_old_acf_json');
+add_action('acf/save_post', 'cleanup_old_acf_json');

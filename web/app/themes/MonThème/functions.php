@@ -1,4 +1,5 @@
 <?php
 Timber\Timber::init();
 
-include_once get_stylesheet_directory() . '/inc/acf-config.php';
+// Inclure la configuration ACF
+require_once get_stylesheet_directory() . '/inc/acf-config.php';

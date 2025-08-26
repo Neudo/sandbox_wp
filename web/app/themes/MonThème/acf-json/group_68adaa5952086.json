@@ -1,11 +1,11 @@
 {
-  "key": "group_68ad94de6df1f",
-  "title": "test 2 ok",
+  "key": "group_68adaa5952086",
+  "title": "ok non !!",
   "fields": [
     {
-      "key": "field_68ad94de3bb1b",
-      "label": "test 2 -> ok",
-      "name": "test__syncro",
+      "key": "field_68adaa5949ecc",
+      "label": "okokokok non",
+      "name": "okokokok",
       "aria-label": "",
       "type": "text",
       "instructions": "",
@@ -16,9 +16,8 @@
         "class": "",
         "id": ""
       },
-      "default_value": "ok",
+      "default_value": "",
       "maxlength": "",
-      "allow_in_bindings": 0,
       "placeholder": "",
       "prepend": "",
       "append": ""
@@ -42,5 +41,5 @@
   "active": true,
   "description": "",
   "show_in_rest": 0,
-  "modified": 1756207642
+  "modified": 1756212223
 }

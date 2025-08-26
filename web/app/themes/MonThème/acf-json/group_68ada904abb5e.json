@@ -1,11 +1,11 @@
 {
-  "key": "group_68ad9645b0af0",
-  "title": "ACF From test workflow - Après syncro ok",
+  "key": "group_68ada904abb5e",
+  "title": "test encore là",
   "fields": [
     {
-      "key": "field_68ad9646d8427",
-      "label": "ACF From wf - Après syncro ok",
-      "name": "acf_from_wf",
+      "key": "field_68ada9046015a",
+      "label": "test encore ok",
+      "name": "test_encore",
       "aria-label": "",
       "type": "text",
       "instructions": "",
@@ -18,7 +18,6 @@
       },
       "default_value": "",
       "maxlength": "",
-      "allow_in_bindings": 0,
       "placeholder": "",
       "prepend": "",
       "append": ""
@@ -42,5 +41,5 @@
   "active": true,
   "description": "",
   "show_in_rest": 0,
-  "modified": 1756206892
+  "modified": 1756211473
 }

@@ -1,32 +1,11 @@
 {
-    "key": "group_68ad94de6df1f",
-    "title": "test 2",
+    "key": "group_68ad9645b0af0",
+    "title": "ACF From test workflow",
     "fields": [
         {
-            "key": "field_68ad94de3bb1b",
-            "label": "test 2",
-            "name": "test_2",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_68ad965fa7e04",
-            "label": "edit from wf",
-            "name": "edit_from_wf",
+            "key": "field_68ad9646d8427",
+            "label": "ACF From wf",
+            "name": "acf_from_wf",
             "aria-label": "",
             "type": "text",
             "instructions": "",
@@ -63,5 +42,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1756206695
+    "modified": 1756206680
 }
